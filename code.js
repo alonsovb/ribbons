@@ -6,22 +6,33 @@ window.onload = function() {
 	canvas.width = W;
 	canvas.height = H;
 
-	ctx.fillStyle = "black";
-	ctx.fillRect(0, 0, W, H);
-
 	var particles = [];
-	for (var i = 0; i < 20; i++) {
+	for (var i = 0; i < 30; i++) {
 		particles.push(new particle());
 	}
 
 	function particle() {
 		this.location = {x: Math.random()*W, y: Math.random()*H};
-		this.radius = 3;
+		this.radius = 0;
 		this.speed = 3;
 		this.angle = Math.random() * 360;
+		var r = Math.round(Math.random() * 255);
+		var g = Math.round(Math.random() * 255);
+		var b = Math.round(Math.random() * 255);
+		var a = Math.random();
+		this.rgba = "rgba(" + r + ", " + g + ", " + b + ", " + a + ")";
 	}
 
 	function draw() {
+
+		// Blending
+		ctx.globalCompositeOperation = "source-over";
+
+		ctx.fillStyle = "rgba(0,0,0,0.02)";
+		ctx.fillRect(0, 0, W, H);
+
+		ctx.globalCompositeOperation = "lighter";
+
 		for (var i = 0; i < particles.length; i++) {
 			var p = particles[i];
 			ctx.fillStyle = "white";
@@ -37,7 +48,7 @@ window.onload = function() {
 					ctx.loneWidth = 1;
 					ctx.moveTo(p.location.x, p.location.y);
 					ctx.lineTo(p2.location.x, p2.location.y);
-					ctx.strokeStyle = "white";
+					ctx.strokeStyle = p.rgba;
 					ctx.stroke();
 				}
 			}
